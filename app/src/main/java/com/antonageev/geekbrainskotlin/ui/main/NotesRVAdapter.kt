@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.antonageev.geekbrainskotlin.R
 import com.antonageev.geekbrainskotlin.data.entity.Note
+import kotlinx.android.synthetic.main.item_note.view.*
 
 class NotesRVAdapter: RecyclerView.Adapter<NotesRVAdapter.ViewHolder>() {
 
@@ -21,11 +22,13 @@ class NotesRVAdapter: RecyclerView.Adapter<NotesRVAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = notes.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(notes[position])
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+        fun bind(note: Note) = with(itemView) {
+            tv_title.text = note.title
+            tv_text.text = note.text
+            setBackgroundColor(note.color)
+        }
     }
 }
