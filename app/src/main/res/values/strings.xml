@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GeekBrainsKotlin</string>
     <string name="HelloButtonText">say hello</string>
+    <string name="new_note">New note</string>
 </resources>
