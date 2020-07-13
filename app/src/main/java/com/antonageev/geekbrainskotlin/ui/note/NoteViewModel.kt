@@ -16,5 +16,4 @@ class NoteViewModel : ViewModel() {
             NoteRepository.saveNote(it)
         }
     }
-
 }

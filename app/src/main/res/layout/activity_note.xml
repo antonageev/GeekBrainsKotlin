@@ -30,7 +30,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title">
+            android:hint="@string/title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_title"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@null"
-            android:text="Text"/>
+            android:text="@string/text"/>
     </LinearLayout>
 
 

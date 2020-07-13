@@ -33,12 +33,12 @@ object NoteRepository {
             Note(
                     UUID.randomUUID().toString(),
                     "Five",
-                    "text number four",
+                    "text number fIve",
                     color = Note.Color.WHITE),
             Note(
                     UUID.randomUUID().toString(),
                     "Six",
-                    "text number four",
+                    "text number six",
                     color = Note.Color.RED)
     )
 
