@@ -23,6 +23,8 @@ data class Note (
         return false
     }
 
+    override fun hashCode() = id.hashCode()
+
     enum class Color {
         WHITE,
         YELLOW,
