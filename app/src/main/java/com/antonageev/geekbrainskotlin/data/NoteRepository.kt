@@ -1,16 +1,67 @@
 package com.antonageev.geekbrainskotlin.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.antonageev.geekbrainskotlin.data.entity.Note
+import java.util.*
 
 object NoteRepository {
-    val notes: List<Note> = listOf(
-            Note("One", "text number one", 0xff126100.toInt()),
-            Note("Two", "text number two", 0xfff03000.toInt()),
-            Note("Three", "text number three", 0xff0b9000.toInt()),
-            Note("Four", "text number four", 0xff671080.toInt())
+
+    private var notesLiveData = MutableLiveData<List<Note>>()
+
+    private val notes: MutableList<Note> = mutableListOf(
+            Note(
+                    UUID.randomUUID().toString(),
+                    "One",
+                    "text number one",
+                    color = Note.Color.YELLOW),
+            Note(
+                    UUID.randomUUID().toString(),
+                    "Two",
+                    "text number two",
+                    color = Note.Color.BLUE),
+            Note(
+                    UUID.randomUUID().toString(),
+                    "Three",
+                    "text number three",
+                    color = Note.Color.GREEN),
+            Note(
+                    UUID.randomUUID().toString(),
+                    "Four",
+                    "text number four",
+                    color = Note.Color.VIOLET),
+            Note(
+                    UUID.randomUUID().toString(),
+                    "Five",
+                    "text number fIve",
+                    color = Note.Color.WHITE),
+            Note(
+                    UUID.randomUUID().toString(),
+                    "Six",
+                    "text number six",
+                    color = Note.Color.RED)
     )
 
-//    fun getNotes(): List<Note> {
-//        return notes
-//    }
+    init {
+        notesLiveData.value = notes
+    }
+
+    fun saveNote(note: Note) {
+        addOrReplace(note)
+        notesLiveData.value = notes
+    }
+
+    fun addOrReplace(note: Note) {
+        for (i in 0 until notes.size) {
+            if (notes[i] == note) {
+                notes[i] = note
+                return
+            }
+        }
+        notes.add(note)
+    }
+
+    fun getNotes(): LiveData<List<Note>> {
+        return notesLiveData
+    }
 }
