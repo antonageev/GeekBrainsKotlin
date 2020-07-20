@@ -31,7 +31,7 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
         }
     }
 
-    private var note : Note? = null
+//    private var note : Note? = null
     override val viewModel: NoteViewModel by lazy {
         ViewModelProviders.of(this).get(NoteViewModel::class.java)
     }
@@ -59,20 +59,17 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     }
 
     override fun renderData(data: Note?) {
-        this.note = data
-        supportActionBar?.title = note?.let {
+//        this.note = data
+        supportActionBar?.title = data?.let {
             SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(it.lastState)
-        } ?: let {
-            getString(R.string.new_note)
-        }
+        } ?: getString(R.string.new_note)
 
-        initView()
+        initView(data)
     }
 
-    private fun initView() {
-        // TODO: подумать как исправить
-        et_title.removeTextChangedListener(textChangeListener)
-        et_body.removeTextChangedListener(textChangeListener)
+    private fun initView(note: Note?) {
+//        et_title.removeTextChangedListener(textChangeListener)
+//        et_body.removeTextChangedListener(textChangeListener)
 
         note?.let {
             et_title.setText(it.title)
@@ -96,28 +93,36 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     fun saveNote() {
         Log.wtf("NoteActivity", "saveNote invoked!!!")
         if (et_title.text.isNullOrBlank()) return
-
-        note = note?.copy(
-                title = et_title.text.toString(),
-                text = et_body.text.toString(),
-                lastState = Date()
-        ) ?: Note (id = UUID.randomUUID().toString(),
-                title = et_title.text.toString(),
-                text = et_body.text.toString()
-        )
-
-        note?.let {
-            viewModel.save(it)
-        }
+//
+//        note = note?.copy(
+//                title = et_title.text.toString(),
+//                text = et_body.text.toString(),
+//                lastState = Date()
+//        ) ?: Note (id = UUID.randomUUID().toString(),
+//                title = et_title.text.toString(),
+//                text = et_body.text.toString()
+//        )
+//
+//        note?.let {
+//            viewModel.save(it)
+//        }
+        val title = et_title.text.toString()
+        val body = et_body.text.toString()
+        viewModel.save(title, body)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         android.R.id.home -> {
-            saveNote()
+//            saveNote()
             onBackPressed()
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveToRepository()
     }
 
 }
