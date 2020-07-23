@@ -24,10 +24,9 @@ class FirestoreProvider : RemoteDataProvider {
     //TODO 1:42:44 - запихнуть currentUser в Delegate
 
     override fun getCurrentUser(): LiveData<User> = MutableLiveData<User>().apply {
-
-            value = currentUser?.let {
-                User(it.displayName ?: "", it.email ?: "")
-            }
+        value = currentUser?.let {
+            User(it.displayName ?: "", it.email ?: "")
+        }
     }
 
     private fun getUserNotesCollection() = currentUser?.let {
