@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "501368155543",
+    "firebase_url": "https://geekbrainskotlin-f5395.firebaseio.com",
+    "project_id": "geekbrainskotlin-f5395",
+    "storage_bucket": "geekbrainskotlin-f5395.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501368155543:android:80f340468b54ac07e7e8d2",
+        "android_client_info": {
+          "package_name": "com.antonageev.geekbrainskotlin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501368155543-smqcpok7ikfsn2pa963p29vi47ggr14u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.antonageev.geekbrainskotlin",
+            "certificate_hash": "ea29c54464a39e4edcd20febc3620aba317d2033"
+          }
+        },
+        {
+          "client_id": "501368155543-am811acnq0kbbqd9pihanf928qjhqvki.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0nFwOTCmU67CCnkYzZGyuZQBEI2tlgtQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501368155543-am811acnq0kbbqd9pihanf928qjhqvki.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
