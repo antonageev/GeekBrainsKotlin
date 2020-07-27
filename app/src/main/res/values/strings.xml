@@ -5,4 +5,8 @@
     <string name="title">Title</string>
     <string name="text">Text</string>
     <string name="logout_menu_title">Logout</string>
+    <string name="menu_pick_color">Pick color</string>
+    <string name="menu_delete">Delete</string>
+    <string name="delete_confirmation">Are you sure to delete this note?</string>
+    <string name="hint_input_text">input text</string>
 </resources>

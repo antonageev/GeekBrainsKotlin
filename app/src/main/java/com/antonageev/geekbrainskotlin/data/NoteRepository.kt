@@ -1,18 +1,17 @@
 package com.antonageev.geekbrainskotlin.data
 
 import com.antonageev.geekbrainskotlin.data.entity.Note
-import com.antonageev.geekbrainskotlin.data.provider.FirestoreProvider
 import com.antonageev.geekbrainskotlin.data.provider.RemoteDataProvider
 
-object NoteRepository {
+class NoteRepository(val provider : RemoteDataProvider) {
 
-    private val remoteProvider : RemoteDataProvider = FirestoreProvider()
+    fun saveNote(note: Note) = provider.saveNote(note)
 
-    fun saveNote(note: Note) = remoteProvider.saveNote(note)
+    fun getNoteById(id: String) = provider.getNoteById(id)
 
-    fun getNoteById(id: String) = remoteProvider.getNoteById(id)
+    fun getNotes() = provider.subscribeToAllNotes()
 
-    fun getNotes() = remoteProvider.subscribeToAllNotes()
+    fun getCurrentUser() = provider.getCurrentUser()
 
-    fun getCurrentUser() = remoteProvider.getCurrentUser()
+    fun deleteNote(noteId : String) = provider.deleteNote(noteId)
 }

@@ -6,7 +6,7 @@ import com.antonageev.geekbrainskotlin.data.entity.Note
 import com.antonageev.geekbrainskotlin.data.model.NoteResult
 import com.antonageev.geekbrainskotlin.ui.base.BaseViewModel
 
-class MainViewModel : BaseViewModel<List<Note>?, MainViewState>() {
+class MainViewModel(val repository: NoteRepository) : BaseViewModel<List<Note>?, MainViewState>() {
 
     private val notesObserver = Observer { result : NoteResult ->
         when (result) {
@@ -15,15 +15,15 @@ class MainViewModel : BaseViewModel<List<Note>?, MainViewState>() {
         }
     }
 
-    private val repository = NoteRepository.getNotes()
+    private val repositoryNotes = repository.getNotes()
 
     init {
         viewStateLiveData.value = MainViewState()
-        repository.observeForever(notesObserver)
+        repositoryNotes.observeForever(notesObserver)
     }
 
     override fun onCleared() {
         super.onCleared()
-        repository.removeObserver(notesObserver)
+        repositoryNotes.removeObserver(notesObserver)
     }
 }

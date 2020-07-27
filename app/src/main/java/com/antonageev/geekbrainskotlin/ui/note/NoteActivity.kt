@@ -1,23 +1,25 @@
 package com.antonageev.geekbrainskotlin.ui.note
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.ViewModelProviders
 import com.antonageev.geekbrainskotlin.R
 import com.antonageev.geekbrainskotlin.data.common.getColorInt
 import com.antonageev.geekbrainskotlin.data.entity.Note
 import com.antonageev.geekbrainskotlin.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_note.*
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NoteActivity : BaseActivity<Note?, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
 
     override val layoutRes = R.layout.activity_note
 
@@ -33,9 +35,8 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
     }
 
 //    private var note : Note? = null
-    override val viewModel: NoteViewModel by lazy {
-        ViewModelProviders.of(this).get(NoteViewModel::class.java)
-    }
+    private var color : Note.Color = Note.Color.WHITE
+    override val viewModel: NoteViewModel by viewModel()
 
     val textChangeListener = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -59,27 +60,43 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
         }
     }
 
-    override fun renderData(data: Note?) {
-//        this.note = data
-        supportActionBar?.title = data?.let {
-            SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(it.lastState)
+    override fun renderData(data: NoteViewState.Data) {
+
+        if (data.isDeleted) finish()
+
+        val note = data.note;
+        supportActionBar?.title = note?.let {
+            SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).format(note.lastState)
         } ?: getString(R.string.new_note)
 
-        initView(data)
+        note?.let {// поскольку не держим Note в Activity, то поле с цветом нужно сразу вытаскивать из полученных данных.
+            color =  it.color
+        }
+
+        initView(note)
     }
 
     private fun initView(note: Note?) {
-//        et_title.removeTextChangedListener(textChangeListener)
-//        et_body.removeTextChangedListener(textChangeListener)
+
 
         note?.let {
-            et_title.setText(it.title)
-            et_body.setText(it.text)
+
+            et_title.removeTextChangedListener(textChangeListener)
+            et_body.removeTextChangedListener(textChangeListener)
+
+            if (et_title.text.toString() != it.title) et_title.setTextKeepState(it.title)
+            if (et_body.text.toString() != it.text) et_body.setTextKeepState(it.text)
             toolbar.setBackgroundColor(it.color.getColorInt(this))
+
+            et_title.addTextChangedListener(textChangeListener)
+            et_body.addTextChangedListener(textChangeListener)
         }
 
-        et_title.addTextChangedListener(textChangeListener)
-        et_body.addTextChangedListener(textChangeListener)
+        colorPicker.onColorClickListener = {
+            color = it
+            toolbar.setBackgroundColor(color.getColorInt(this))
+            saveNote()
+        }
     }
 
     fun saveNote() {
@@ -100,21 +117,37 @@ class NoteActivity : BaseActivity<Note?, NoteViewState>() {
 //        }
         val title = et_title.text.toString()
         val body = et_body.text.toString()
-        viewModel.save(title, body)
+        viewModel.save(title, body, color)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        android.R.id.home -> {
-//            saveNote()
-            onBackPressed()
-            true
-        }
+        android.R.id.home -> onBackPressed().let { true }
+        R.id.palette -> togglePalette(). let { true }
+        R.id.delete -> deleteNote().let { true }
         else -> super.onOptionsItemSelected(item)
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.saveToRepository()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean = MenuInflater(this).inflate(R.menu.note, menu).let { true }
+
+    fun togglePalette() {
+        if (colorPicker.isOpen) {
+            colorPicker.close()
+        } else {
+            colorPicker.open()
+        }
+    }
+
+    fun deleteNote() {
+        AlertDialog.Builder(this)
+                .setMessage(getString(R.string.delete_confirmation))
+                .setPositiveButton("Yes") { _, _ -> viewModel.deleteNote() }
+                .setNegativeButton("No") {dialog, which ->  dialog.dismiss()}
+                .show()
     }
 
 }
