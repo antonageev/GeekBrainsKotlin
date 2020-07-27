@@ -41,7 +41,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
 
     //DB (Firebase)
-    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    implementation 'com.google.firebase:firebase-firestore:21.5.0'
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
 
     //test
     testImplementation 'junit:junit:4.13'
