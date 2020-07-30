@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.antonageev.geekbrainskotlin.R
 import com.antonageev.geekbrainskotlin.data.entity.Note
@@ -14,8 +13,8 @@ import com.antonageev.geekbrainskotlin.ui.base.BaseActivity
 import com.antonageev.geekbrainskotlin.ui.note.NoteActivity
 import com.antonageev.geekbrainskotlin.ui.splash.SplashActivity
 import com.firebase.ui.auth.AuthUI
-import com.google.android.gms.auth.api.Auth
 import kotlinx.android.synthetic.main.activity_main.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.LogoutListener {
 
@@ -25,9 +24,7 @@ class MainActivity : BaseActivity<List<Note>?, MainViewState>(), LogoutDialog.Lo
         }
     }
 
-    override val viewModel: MainViewModel by lazy {
-        ViewModelProviders.of(this).get(MainViewModel::class.java)
-    }
+    override val viewModel: MainViewModel by viewModel()
 
     override val layoutRes = R.layout.activity_main
     lateinit var adapter: NotesRVAdapter

@@ -18,6 +18,23 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             app:title="My Notes"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorPrimaryDark"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <com.antonageev.geekbrainskotlin.ui.customviews.ColorPickerView
+                android:id="@+id/colorPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"/>
+
+        </HorizontalScrollView>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -45,7 +62,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@null"
-            android:text="@string/text"/>
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:hint="@string/hint_input_text"/>
     </LinearLayout>
 
 

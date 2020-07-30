@@ -6,21 +6,19 @@ import com.antonageev.geekbrainskotlin.data.entity.Note
 import com.antonageev.geekbrainskotlin.data.entity.User
 import com.antonageev.geekbrainskotlin.data.error.NoAuthException
 import com.antonageev.geekbrainskotlin.data.model.NoteResult
+import com.antonageev.geekbrainskotlin.ui.note.NoteViewState
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class FirestoreProvider : RemoteDataProvider {
+class FirestoreProvider(val store : FirebaseFirestore, val auth : FirebaseAuth) : RemoteDataProvider {
 
     companion object{
         private const val NOTES_COLLECTION = "notes"
         private const val USERS_COLLECTION = "users"
     }
 
-    private val store = FirebaseFirestore.getInstance()
-
-
     private val currentUser
-        get() = FirebaseAuth.getInstance().currentUser
+        get() = auth.currentUser
     //TODO 1:42:44 - запихнуть currentUser в Delegate
 
     override fun getCurrentUser(): LiveData<User> = MutableLiveData<User>().apply {
@@ -66,6 +64,18 @@ class FirestoreProvider : RemoteDataProvider {
         try {
             getUserNotesCollection().document(note.id).set(note).addOnSuccessListener {
                 value = NoteResult.Success(note)
+            }.addOnFailureListener {
+                value = NoteResult.Error(it)
+            }
+        } catch (e: Throwable) {
+            value = NoteResult.Error(e)
+        }
+    }
+
+    override fun deleteNote(noteId: String): LiveData<NoteResult> = MutableLiveData<NoteResult>().apply {
+        try {
+            getUserNotesCollection().document(noteId).delete().addOnSuccessListener {
+                value = NoteResult.Success(NoteViewState.Data(isDeleted = true))
             }.addOnFailureListener {
                 value = NoteResult.Error(it)
             }
