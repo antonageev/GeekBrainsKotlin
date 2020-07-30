@@ -107,7 +107,7 @@ class FirestoreProviderTest {
         every {mockResultCollection.document(testNotes[0].id)} returns mockDocReference
         every { mockDocReference.set(testNotes[0]).addOnSuccessListener(capture(slot)) } returns mockk()
         provider.saveNote(testNotes[0]).observeForever {
-            result = (it as? NoteResult.Success<Note>)?.data // возвращает NoteResult.Error, а не Success. Тест проходит, только потому что result = null и cast проваливается и тоже = null
+            result = (it as? NoteResult.Success<Note>)?.data
         }
         slot.captured.onSuccess(null)
         assertEquals(testNotes[0], result)
@@ -122,19 +122,20 @@ class FirestoreProviderTest {
     }
 
     @Test
-    fun `deleteNote should return isDeleted`() {
+    fun `deleteNote should return isDeleted true`() {
         var result : Boolean = false
         val mockDocumentReference = mockk<DocumentReference>()
         val slot = slot<OnSuccessListener<in Void>>()
 
         every { mockResultCollection.document(testNotes[0].id) } returns mockDocumentReference
         every { mockDocumentReference.delete().addOnSuccessListener(capture(slot)) } returns mockk()
+        provider.saveNote(testNotes[0])
         provider.deleteNote(testNotes[0].id).observeForever {
-            result = (it as NoteResult.Success<NoteViewState.Data>).data.isDeleted
+            result = (it as NoteResult.Success<NoteViewState.Data>).data.isDeleted // бросает ClassCastException из-за возврата NoteResult.Error вместо Success
         }
         slot.captured.onSuccess(null)
         assertTrue(result)
 
     }
-    // TODO 1:04:20
+
 }
