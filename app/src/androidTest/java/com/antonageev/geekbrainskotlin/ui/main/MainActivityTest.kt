@@ -2,6 +2,7 @@ package com.antonageev.geekbrainskotlin.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition
 import androidx.test.espresso.intent.rule.IntentsTestRule
@@ -18,7 +19,7 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-
+/*
 class MainActivityTest {
 
     @get:Rule
@@ -58,4 +59,11 @@ class MainActivityTest {
         onView(withId(R.id.rv_notes)).perform(scrollToPosition<NotesRVAdapter.ViewHolder>(1))
         onView(withText(testNotes[1].text)).check(matches(isDisplayed()))
     }
+
+    @Test
+    fun `test_test`() {
+        onView(withId(R.id.rv_notes)).perform(click())
+    }
 }
+
+ */

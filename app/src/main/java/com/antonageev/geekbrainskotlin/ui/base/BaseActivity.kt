@@ -10,32 +10,59 @@ import com.antonageev.geekbrainskotlin.R
 import com.antonageev.geekbrainskotlin.data.error.NoAuthException
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KProperty
 
-abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
+abstract class BaseActivity<S> : AppCompatActivity(), CoroutineScope {
 
     companion object{
         const val RC_SIGNIN = 199
     }
 
-    abstract val viewModel: BaseViewModel<T, S>
+    override val coroutineContext: CoroutineContext by lazy {
+        Dispatchers.Main + Job()
+    }
+
+    private lateinit var dataJob : Job
+    private lateinit var errorJob : Job
+
+
+    abstract val viewModel: BaseViewModel<S>
     abstract val layoutRes : Int?
+
+    override fun onStart() {
+        super.onStart()
+        dataJob = launch {
+            viewModel.getViewState().consumeEach {
+                renderData(it)
+            }
+        }
+        errorJob = launch {
+            viewModel.getErrorChannel().consumeEach {
+                renderError(it)
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        dataJob.cancel()
+        errorJob.cancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineContext.cancel()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         layoutRes?.let {
             setContentView(it)
         }
-        setSupportActionBar(toolbar)
-
-        viewModel.getViewState().observe(this, Observer {state ->
-            state?.error?.let {
-                renderError(it)
-            } ?: let {
-                renderData(state.data)
-            }
-        })
-
     }
 
     protected fun renderError(t: Throwable?) {
@@ -75,6 +102,6 @@ abstract class BaseActivity<T, S : BaseViewState<T>> : AppCompatActivity() {
         Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
-    abstract fun renderData(data: T)
+    abstract fun renderData(data: S)
 
 }

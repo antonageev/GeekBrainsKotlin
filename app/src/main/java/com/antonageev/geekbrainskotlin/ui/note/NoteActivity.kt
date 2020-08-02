@@ -15,11 +15,11 @@ import com.antonageev.geekbrainskotlin.data.common.getColorInt
 import com.antonageev.geekbrainskotlin.data.entity.Note
 import com.antonageev.geekbrainskotlin.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_note.*
-import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
-class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
+class NoteActivity : BaseActivity<NoteData>() {
 
     override val layoutRes = R.layout.activity_note
 
@@ -34,7 +34,6 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         }
     }
 
-//    private var note : Note? = null
     private var color : Note.Color = Note.Color.WHITE
     override val viewModel: NoteViewModel by viewModel()
 
@@ -60,7 +59,7 @@ class NoteActivity : BaseActivity<NoteViewState.Data, NoteViewState>() {
         }
     }
 
-    override fun renderData(data: NoteViewState.Data) {
+    override fun renderData(data: NoteData) {
 
         if (data.isDeleted) finish()
 
