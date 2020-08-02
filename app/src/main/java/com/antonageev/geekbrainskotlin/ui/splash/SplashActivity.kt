@@ -5,14 +5,14 @@ import com.antonageev.geekbrainskotlin.ui.base.BaseActivity
 import com.antonageev.geekbrainskotlin.ui.main.MainActivity
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class SplashActivity : BaseActivity<Boolean?, SplashViewState>() {
+class SplashActivity : BaseActivity<Boolean>() {
 
     override val viewModel : SplashViewModel by viewModel()
 
     override val layoutRes = null
 
-    override fun renderData(data: Boolean?) {
-        data?.takeIf { it }?.let {
+    override fun renderData(data: Boolean) {
+        data.takeIf { it }?.let {
             startMainActivity()
         }
     }
